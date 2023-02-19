@@ -1,17 +1,19 @@
+import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionListener;
 import java.io.InputStream;
 import javax.swing.*;
+import java.awt.*;
 
 public class View {
 
     private JFrame startFrame, mazeFrame;
     private JLabel mazeBotLbl, welcomeLbl, insLbl;
+    private JPanel mazePanel;
     private JComboBox sizeBox;
     private JButton startBtn;
 
-    public View(ActionListener startBtnListener) {
+    public View(ActionListener startBListener) {
         
         // Initialize the start window
         this.startFrame = new JFrame("MazeBot");
@@ -46,7 +48,7 @@ public class View {
         Icon start = new ImageIcon("assets/start.png");
         this.startBtn = new JButton(start);
         this.startBtn.setBounds(340,160,150,50);
-        this.startBtn.addActionListener(startBtnListener);
+        this.startBtn.addActionListener(startBListener);
         
         // Components of the frame
         this.startFrame.add(mazeBotLbl);
@@ -58,20 +60,29 @@ public class View {
         this.startFrame.setVisible(true);
     }
 
-    public void MainView() {
+    public void MazeView() {
+        
+        // Get the size of the maze
+        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
         
         // Initialize the maze window
         this.mazeFrame = new JFrame();
         this.mazeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mazeFrame.setLayout(null);
         this.mazeFrame.setResizable(false);
-        this.mazeFrame.setSize(800,800);
+        this.mazeFrame.setSize(900,900);
         this.mazeFrame.getContentPane().setBackground(Color.BLACK);
 
-        // Place maze components
+        // Place maze
+        this.mazePanel = new JPanel();
+        this.mazePanel.setLayout(new GridLayout(size, size, 0,0));
+        this.mazePanel.setBounds(50,40,800,800);
+
+        // Components of the frame
+        this.mazeFrame.add(mazePanel);
         this.mazeFrame.setVisible(true);
     }
-
+    
     public void disposeStart() {
         this.startFrame.dispose();
     }
