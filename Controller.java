@@ -1,5 +1,4 @@
 import java.awt.event.ActionListener;
-import javax.swing.JComboBox;
 import java.awt.event.ActionEvent;
 
 public class Controller {
@@ -20,7 +19,6 @@ public class Controller {
     }
 
     public void openMaze() {
-        
         this.view.disposeStart();
         this.view.MazeView();
     }

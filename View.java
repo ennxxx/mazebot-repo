@@ -1,7 +1,12 @@
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -73,12 +78,19 @@ public class View {
         this.mazeFrame.setSize(900,900);
         this.mazeFrame.getContentPane().setBackground(Color.BLACK);
 
-        // Place maze
+        // Initialize maze panel
         this.mazePanel = new JPanel();
         this.mazePanel.setLayout(new GridLayout(size, size, 0,0));
         this.mazePanel.setBounds(50,40,800,800);
+        this.mazePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
+        
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                JLabel block = makeBlock(mazeArray(size, row, col));
+                this.mazePanel.add(block);
+            }
+        }
 
-        // Components of the frame
         this.mazeFrame.add(mazePanel);
         this.mazeFrame.setVisible(true);
     }
@@ -95,5 +107,69 @@ public class View {
             labelName.setFont(font.deriveFont(Font.PLAIN, size));
         }
         catch(Exception e){}
+    }
+
+    private char mazeArray(int size, int row, int col) {
+
+        ArrayList<char[]> array = new ArrayList<char[]>();
+		char [][] maze = null;
+		BufferedReader reader;
+
+		try {
+			reader = new BufferedReader(new FileReader("maze/maze" + size + ".txt"));
+			
+            reader.readLine();
+			String data;
+            
+			// Reads file
+			while ((data = reader.readLine()) != null) {
+                // Converts data into a char array
+				array.add(data.toCharArray());
+            }
+			reader.close();
+
+			// Create a 2D char array
+			maze = new char[array.size()][];
+
+			// Convert into 2D array
+			for (int i = 0; i < array.size(); i++) {
+				maze[i] = (char[])array.get(i);
+			}
+		
+        } catch (IOException e) {
+			e.printStackTrace();
+		}
+
+        return maze[row][col];
+    }
+
+    private JLabel makeBlock(char c) {
+        
+        // Get the size of the maze
+        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
+        int sizeImg = 800/size;
+
+        JLabel block = new JLabel();
+        switch(c) {
+            case 'S': // Start
+                ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
+                Image mazebot = mazebotIcon.getImage().getScaledInstance(sizeImg, sizeImg, java.awt.Image.SCALE_SMOOTH); 
+                mazebotIcon = new ImageIcon(mazebot);
+                block.setIcon(mazebotIcon);
+                break;
+            case 'G': // Goal
+                block.setBackground(Color.GREEN);
+                break;
+            case '.': // Path
+                block.setBackground(Color.BLACK);
+                break;
+            case '#': // Wall
+                block.setBackground(Color.WHITE);
+                break;
+        }
+        
+        block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        block.setOpaque(true);
+        return block;
     }
 }
