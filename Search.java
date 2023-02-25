@@ -17,12 +17,11 @@ public class Search {
     ArrayList<Block> actualPath = new ArrayList<>();
     ArrayList<Block> frontier = new ArrayList<>();
 
-    public void initMaze() {
-
+    public void initMaze(int size) {
         try {
             // Read file
             // Replace 8
-            String fileStr = Files.readString(Path.of("maze/maze" + 8 + ".txt"));
+            String fileStr = Files.readString(Path.of("maze/maze" + String.valueOf(size) + ".txt"));
 
             // Ignore the first line
             Integer firstLine=fileStr.indexOf('\n',0);
@@ -42,11 +41,11 @@ public class Search {
                 // Place blocks in an array
                 blocks.add(block);
 
-                x = x + 1;
+                y = y + 1;
 
                 if(c == '\n') {
-                    x = 0; // Reset x value to 0 for a new line
-                    y = y + 1;
+                    y = 0; // Reset x value to 0 for a new line
+                    x = x + 1;
                 }
             }
         } catch (IOException e) {

@@ -1,3 +1,4 @@
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
@@ -17,7 +18,6 @@ public class View {
     private JButton startBtn;
 
     public View(ActionListener startBListener) {
-        s.initMaze();
         // Initialize the start window
         this.startFrame = new JFrame("MazeBot");
         this.startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -52,6 +52,13 @@ public class View {
         this.startBtn = new JButton(start);
         this.startBtn.setBounds(340,160,150,50);
         this.startBtn.addActionListener(startBListener);
+        this.startBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                s.initMaze(getSize());
+            }
+        });
         
         // Components of the frame
         this.startFrame.add(mazeBotLbl);
@@ -119,7 +126,7 @@ public class View {
         
         if (b.isStart == true) {
             ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
-            Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH); 
+            Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
             mazebotIcon = new ImageIcon(mazebot);
             block.setIcon(mazebotIcon);
         }
@@ -135,7 +142,7 @@ public class View {
         if (b.isPath == true) {
             block.setBackground(Color.BLACK);
         }
-        
+
         block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         block.setOpaque(true);
         return block;

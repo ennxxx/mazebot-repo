@@ -12,7 +12,8 @@ public class Controller {
         this.view = new View(new ActionListener() {
             @Override  
             public void actionPerformed(ActionEvent e) {
-                // Open up maze frame when start button is clicked
+
+                // Open up maze frame when start button is clicked\
                 openMaze();
             }
         });
