@@ -1,17 +1,15 @@
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class View {
 
+    private Search s = new Search();
+    
     private JFrame startFrame, mazeFrame;
     private JLabel mazeBotLbl, welcomeLbl, insLbl;
     private JPanel mazePanel;
@@ -19,7 +17,7 @@ public class View {
     private JButton startBtn;
 
     public View(ActionListener startBListener) {
-        
+        s.initMaze();
         // Initialize the start window
         this.startFrame = new JFrame("MazeBot");
         this.startFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,7 +66,7 @@ public class View {
     public void MazeView() {
         
         // Get the size of the maze
-        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
+        int size = getSize();
         
         // Initialize the maze window
         this.mazeFrame = new JFrame();
@@ -84,9 +82,10 @@ public class View {
         this.mazePanel.setBounds(50,40,800,800);
         this.mazePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
         
+        // Initialize maze blocks
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                JLabel block = makeBlock(mazeArray(size, row, col));
+                JLabel block = makeBlock(s.getBlock(row, col));
                 this.mazePanel.add(block);
             }
         }
@@ -109,63 +108,32 @@ public class View {
         catch(Exception e){}
     }
 
-    private char mazeArray(int size, int row, int col) {
-
-        ArrayList<char[]> array = new ArrayList<char[]>();
-		char [][] maze = null;
-		BufferedReader reader;
-
-		try {
-			reader = new BufferedReader(new FileReader("maze/maze" + size + ".txt"));
-			
-            reader.readLine();
-			String data;
-            
-			// Reads file
-			while ((data = reader.readLine()) != null) {
-                // Converts data into a char array
-				array.add(data.toCharArray());
-            }
-			reader.close();
-
-			// Create a 2D char array
-			maze = new char[array.size()][];
-
-			// Convert into 2D array
-			for (int i = 0; i < array.size(); i++) {
-				maze[i] = (char[])array.get(i);
-			}
-		
-        } catch (IOException e) {
-			e.printStackTrace();
-		}
-
-        return maze[row][col];
+    public int getSize() {
+        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
+        return size;
     }
 
-    private JLabel makeBlock(char c) {
-        
-        // Get the size of the maze
-        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
-        int sizeImg = 800/size;
-
+    private JLabel makeBlock(Block b) {
+        int size = 800 / getSize();
         JLabel block = new JLabel();
-        switch(c) {
-            case 'S': // Start
-                ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
-                Image mazebot = mazebotIcon.getImage().getScaledInstance(sizeImg, sizeImg, java.awt.Image.SCALE_SMOOTH); 
-                mazebotIcon = new ImageIcon(mazebot);
-                block.setIcon(mazebotIcon);
-                break;
-            case 'G': // Goal
-                block.setBackground(Color.GREEN);
-                break;
-            case '.': // Path
-                block.setBackground(Color.BLACK);
-                break;
-            case '#': // Wall
-                block.setBackground(Color.WHITE);
-                break;
+        
+        if (b.isStart == true) {
+            ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
+            Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH); 
+            mazebotIcon = new ImageIcon(mazebot);
+            block.setIcon(mazebotIcon);
+        }
+
+        if (b.isGoal == true) {
+            block.setBackground(Color.GREEN);
+        }
+
+        if (b.isWall == true) {
+            block.setBackground(Color.WHITE);
+        }
+
+        if (b.isPath == true) {
+            block.setBackground(Color.BLACK);
         }
         
         block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));

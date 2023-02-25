@@ -22,4 +22,9 @@ public class Controller {
         this.view.disposeStart();
         this.view.MazeView();
     }
+
+    public int getSize() {
+        return this.view.getSize();
+    }
 }
+ 
