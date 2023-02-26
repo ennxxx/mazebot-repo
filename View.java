@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class View {
-
     private Search s = new Search();
     
     private JFrame startFrame, mazeFrame;
@@ -55,7 +54,6 @@ public class View {
         this.startBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 s.initMaze(getSize());
             }
         });
@@ -71,7 +69,6 @@ public class View {
     }
 
     public void MazeView() {
-        
         // Get the size of the maze
         int size = getSize();
         
@@ -131,17 +128,14 @@ public class View {
             block.setIcon(mazebotIcon);
         }
 
-        if (b.isGoal == true) {
+        if (b.isGoal == true) 
             block.setBackground(Color.GREEN);
-        }
 
-        if (b.isWall == true) {
+        if (b.isWall == true)
             block.setBackground(Color.WHITE);
-        }
 
-        if (b.isPath == true) {
+        if (b.isPath == true)
             block.setBackground(Color.BLACK);
-        }
 
         block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         block.setOpaque(true);

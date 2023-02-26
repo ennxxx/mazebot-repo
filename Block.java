@@ -13,25 +13,20 @@ public class Block {
     Double fScore; // g() + h()
 
     public Block(Integer x, Integer y, char c) {
-
         this.x = x;
         this.y = y;
 
-        if(c == '#') {
+        if(c == '#')
             this.isWall = true;
-        }
 
-        if(c == 'S') {
+        if(c == 'S')
             this.isStart = true;
-        }
 
-        if(c == 'G') {
+        if(c == 'G')
             this.isGoal = true;
-        }
 
-        if(c == '.') {
+        if(c == '.')
             this.isPath = true;
-        }
     }
 
     public Double getGScore() {
