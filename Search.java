@@ -15,6 +15,8 @@ public class Search {
     private Block startBlock;
     private Block goalBlock;
 
+    private ArrayList<Block> optimalPath = new ArrayList<Block>();
+
     public Search(View view) {
         this.view = view;
     }
@@ -132,6 +134,10 @@ public class Search {
 
             /* PRINT STATEMENTS: DELETE AFTER */
 
+            System.out.println("------------------------");
+            System.out.println("State [" + exploredStates + "]");
+            System.out.println();
+
             System.out.println("currBlock coordinates: " + currBlock.getX() + " " + currBlock.getY());
             System.out.println("goalBlock coordinates: " + goalBlock.getX() + " " + goalBlock.getY());
             System.out.println();
@@ -197,9 +203,16 @@ public class Search {
             currBlock.isCurrent = false;
         }
 
-        //TO DO: Confirm if Optimal Path
-        printOptimalPath();
-        System.out.println(exploredStates);
+        //if goal not reached
+        if (!isGoalReached(currBlock)) {
+            System.out.println("No path exists to the goal!");
+        }
+        else { //if goal is reached -> there exist a path
+            findOptimalPath();
+            printOptimalPath(mazeSize);
+        }
+
+        System.out.println("Number of explored states: " + exploredStates);
     }
 
     public boolean isGoalReached(Block currBlock) {
@@ -242,19 +255,55 @@ public class Search {
     // Optimal path printing is simply: Starting from the goalBlock, get their parentBlock
     // until it reached the startBlock (where startBlock.parentBlock = null)
 
-    public void printOptimalPath() {
+    public void findOptimalPath() {
 
         Block b = goalBlock;
 
         while (b.parentBlock != null) {
-            System.out.println(b);
+            optimalPath.add(b);
             b = b.parentBlock;
         }
+    }
+
+    public void printOptimalPath(int mazeNSize) {
+
+        System.out.println("------------------------");
+        System.out.println("Optimal Path");
+
+        for(int i = 0; i < mazeNSize; i++) {
+            for(int j = 0; j < mazeNSize; j++) {
+
+                if (maze[i][j].isStart()) {
+                    System.out.print("\u001B[31mS\u001B[0m");
+                }
+                else if (maze[i][j].isGoal()) {
+                    System.out.print("\u001B[32mG\u001B[0m");
+                }
+                else if (optimalPath.contains(maze[i][j])) {
+                    System.out.print("\u001B[35mO\u001B[0m");
+                }
+                else {
+                    if(maze[i][j].isWall) {
+                        System.out.print("#");
+                    }
+                    else {
+                        if (maze[i][j].isExplored) {
+                            System.out.print("\u001B[34mX\u001B[0m");
+                        }
+                        else {
+                            System.out.print(".");
+                        }
+                    }
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+
     }
 
     public List<Block> getBlocks() {
         return this.blocks;
     }
-
 
 }
