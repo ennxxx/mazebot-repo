@@ -35,15 +35,21 @@ public class Search {
             int y = 0;
 
             for (char c : chars) {
-                // Initialize a block inside the maze
-                Block block = new Block(x, y, c);
-                // Place blocks in an array
-                blocks.add(block);
-                // Assign x and y values
-                y = y + 1;
-                if (c == '\n') {
-                    y = 0; // Reset y value to 0 for a new line
-                    x = x + 1;
+                System.out.println("Test");
+                if (c == 'S' || c == 'G' || c == '.' || c == '#' || c == '\n'){
+                    if (c == '\n'){
+                        y = 0; // Reset y value to 0 for a new line
+                        x = x + 1;
+                    } else {
+                        // Initialize a block inside the maze
+                        Block block = new Block(x, y, c);
+
+                        // Place blocks in an array
+                        blocks.add(block);
+
+                        // Assign x and y values
+                        y = y + 1;
+                    }
                 }
             }
         } catch (IOException e) {
@@ -77,7 +83,7 @@ public class Search {
                 maze[i][j] = blocks.get(indexCount);
                 indexCount++;
             }
-            indexCount++;
+            //indexCount++;
         }
         System.out.println(maze.length);
 
