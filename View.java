@@ -237,6 +237,7 @@ public class View {
                 Block b = s.getBlock(row, col);
 
                 JLabel block = new JLabel();
+                
                 if (b.isStart == true) {
                     block.setBackground(Color.BLUE);
                 }
@@ -250,13 +251,16 @@ public class View {
 
                 if (b.isPath == true)
                     block.setBackground(Color.BLACK);
+                
                 List<Block> searchPath = new ArrayList<Block>(s.getSearchPath());
-                if (searchPath.contains(b)) {
+                
+                if (searchPath.contains(b) && b.isStart == false) {
                     block.setBackground(Color.YELLOW);
                     block.setText(String.valueOf(searchPath.indexOf(b)));
                     block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
+
                 block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
                 block.setOpaque(true);
 
