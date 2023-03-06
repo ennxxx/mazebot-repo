@@ -174,7 +174,6 @@ public class View {
 
                 // MAKE BLOCK
                 JLabel block = new JLabel();
-                int size1 = 800 / getSize();
 
                 if (b.isStart == true) {
                     block.setBackground(Color.BLUE);
@@ -193,6 +192,7 @@ public class View {
                 if (s.getOptimalPath().contains(b)) {
                     block.setBackground(Color.CYAN);
                     block.setText(String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
+                    block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
                 block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -201,6 +201,8 @@ public class View {
                 this.mazePanel.add(block);
             }
             }
+            optiBtn.setIcon(new ImageIcon("assets/opt2.png"));
+            actualBtn.setIcon(new ImageIcon("assets/exp1.png"));
             this.mazePanel.repaint();
             this.mazePanel.revalidate();
             this.mazeFrame.add(mazePanel);
@@ -229,12 +231,12 @@ public class View {
         // Initialize maze blocks
         this.mazeFrame.getContentPane().removeAll();
         this.mazePanel.removeAll();
+
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 Block b = s.getBlock(row, col);
 
                 JLabel block = new JLabel();
-                int size1 = 800 / getSize();
                 if (b.isStart == true) {
                     block.setBackground(Color.BLUE);
                 }
@@ -252,6 +254,7 @@ public class View {
                 if (searchPath.contains(b)) {
                     block.setBackground(Color.YELLOW);
                     block.setText(String.valueOf(searchPath.indexOf(b)));
+                    block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
                 block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -260,6 +263,8 @@ public class View {
                 this.mazePanel.add(block);
             }
         }
+        actualBtn.setIcon(new ImageIcon("assets/exp2.png"));
+        optiBtn.setIcon(new ImageIcon("assets/opt1.png"));
         this.mazePanel.repaint();
         this.mazePanel.revalidate();
         this.mazeFrame.add(mazePanel);
@@ -276,7 +281,6 @@ public class View {
         else {
             message = "No path to the goal exists!";
         }
-
 
         JOptionPane.showMessageDialog(mazeFrame,
                 message + "\nTotal Number of States Explored: "+ totalPath,
