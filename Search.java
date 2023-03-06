@@ -69,7 +69,7 @@ public class Search {
         return null;
     }
 
-    public void search() {
+    public boolean search() {
 
         //Compute the size of the maze
         int mazeSize = (int) Math.sqrt(blocks.size());
@@ -142,22 +142,22 @@ public class Search {
 
             /* PRINT STATEMENTS: DELETE AFTER */
 
-            System.out.println("------------------------");
-            System.out.println("State [" + exploredStates + "]");
-            System.out.println();
-
-            System.out.println("currBlock coordinates: " + currBlock.getX() + " " + currBlock.getY());
-            System.out.println("goalBlock coordinates: " + goalBlock.getX() + " " + goalBlock.getY());
-            System.out.println();
-
-
-            System.out.println("gScore: " + currBlock.getGScore());
-            System.out.println("hScore: " + currBlock.getHScore());
-            System.out.println("fScore: " + currBlock.getFScore());
-            System.out.println();
-
-            System.out.println(currBlock);
-            printMaze(mazeSize, currBlock);
+//            System.out.println("------------------------");
+//            System.out.println("State [" + exploredStates + "]");
+//            System.out.println();
+//
+//            System.out.println("currBlock coordinates: " + currBlock.getX() + " " + currBlock.getY());
+//            System.out.println("goalBlock coordinates: " + goalBlock.getX() + " " + goalBlock.getY());
+//            System.out.println();
+//
+//
+//            System.out.println("gScore: " + currBlock.getGScore());
+//            System.out.println("hScore: " + currBlock.getHScore());
+//            System.out.println("fScore: " + currBlock.getFScore());
+//            System.out.println();
+//
+//            System.out.println(currBlock);
+//            printMaze(mazeSize, currBlock);
 
             /* */
 
@@ -214,13 +214,16 @@ public class Search {
         //if goal not reached
         if (!isGoalReached(currBlock)) {
             System.out.println("No path exists to the goal!");
+            System.out.println("Number of explored states: " + exploredStates);
+            return false;
         }
         else { //if goal is reached -> there exist a path
             findOptimalPath();
             printOptimalPath(mazeSize);
+            System.out.println("Number of explored states: " + exploredStates);
+            return true;
         }
 
-        System.out.println("Number of explored states: " + exploredStates);
     }
 
     public boolean isGoalReached(Block currBlock) {

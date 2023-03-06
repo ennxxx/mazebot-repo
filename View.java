@@ -20,6 +20,7 @@ public class View {
     private JPanel mazePanel;
     private JButton startBtn, actualBtn, optiBtn;
 
+    boolean pathFound = false;
     public View(ActionListener startBListener) {
         // Initialize the start window
         this.startFrame = new JFrame("MazeBot");
@@ -80,6 +81,9 @@ public class View {
         // Initialize maze blocks
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
+                System.out.println(size);
+                System.out.print(row);
+                System.out.print(col);
                 JLabel block = makeBlock(s.getBlock(row, col));
                 this.mazePanel.add(block);
             }
@@ -100,7 +104,7 @@ public class View {
         this.mazeFrame.add(optiBtn);
         this.mazeFrame.setVisible(true);
 
-        s.search();
+        this.pathFound = s.search();
     }
     
     public void disposeStart() {
@@ -119,7 +123,6 @@ public class View {
 
     public int getSize() {
         File fileInput = new File("maze/maze.txt");
-
         Scanner scan = null;
         try {
             scan = new Scanner(fileInput);
@@ -156,128 +159,128 @@ public class View {
     }
 
     public void viewOptimalPath() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-
         // MAZE VIEW
         // Get the size of the maze
         int size = getSize();
         // Initialize the maze window
 
         // Initialize maze blocks
-        int index = s.getOptimalPath().size();
-        while(index >= 0) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
-            this.mazeFrame.getContentPane().removeAll();
-            this.mazePanel.removeAll();
-            for (int row = 0; row < size; row++) {
-                for (int col = 0; col < size; col++) {
-                    Block b = s.getBlock(row, col);
+        this.mazeFrame.getContentPane().removeAll();
+        this.mazePanel.removeAll();
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                Block b = s.getBlock(row, col);
 
-                    // MAKE BLOCK
-                    JLabel block = new JLabel();
-                    int size1 = 800 / getSize();
+                // MAKE BLOCK
+                JLabel block = new JLabel();
+                int size1 = 800 / getSize();
 
-                    if (b.isStart == true) {
-                        block.setBackground(Color.BLUE);
-                    }
-
-                    if (b.isGoal == true) {
-                        block.setBackground(Color.GREEN);
-                    }
-
-                    if (b.isWall == true)
-                        block.setBackground(Color.WHITE);
-
-                    if (b.isPath == true)
-                        block.setBackground(Color.BLACK);
-                    List<Block> optimalPath = s.getOptimalPath().subList(index, s.getOptimalPath().size());
-                    if (optimalPath.contains(b)) {
-                        block.setBackground(Color.CYAN);
-                        block.setText(String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
-                        block.setHorizontalAlignment(JLabel.CENTER);
-                    }
-                    block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                    block.setOpaque(true);
-
-                    this.mazePanel.add(block);
+                if (b.isStart == true) {
+                    block.setBackground(Color.BLUE);
                 }
+
+                if (b.isGoal == true) {
+                    block.setBackground(Color.GREEN);
+                }
+
+                if (b.isWall == true)
+                    block.setBackground(Color.WHITE);
+
+                if (b.isPath == true)
+                    block.setBackground(Color.BLACK);
+
+                if (s.getOptimalPath().contains(b)) {
+                    block.setBackground(Color.CYAN);
+                    block.setText(String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
+                    block.setHorizontalAlignment(JLabel.CENTER);
+                }
+                block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                block.setOpaque(true);
+
+                this.mazePanel.add(block);
             }
-            index--;
+            }
             this.mazePanel.repaint();
             this.mazePanel.revalidate();
             this.mazeFrame.add(mazePanel);
+            this.mazeFrame.add(actualBtn);
+            this.mazeFrame.add(optiBtn);
             this.mazeFrame.repaint();
             this.mazeFrame.revalidate();
-        }
+            String message;
+            if(pathFound = true) {
+                message = "Path Found!";
+            }
+            else {
+                message = "No path to the goal exists!";
+            }
+            JOptionPane.showMessageDialog(mazeFrame,
+                    message + "\nMoves to Goal: "+ s.getOptimalPath().size(),
+                    "Optimal Path",
+                    JOptionPane.INFORMATION_MESSAGE);
     }
 
     public void viewExploredPath() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-
         // Get the size of the maze
         int size = getSize();
         // Initialize the maze window
 
         // Initialize maze blocks
-        int index = 0;
-        while(index < s.getSearchPath().size() + 1) {
-            try {
-                Thread.sleep(200);
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
-            this.mazeFrame.getContentPane().removeAll();
-            this.mazePanel.removeAll();
-            for (int row = 0; row < size; row++) {
-                for (int col = 0; col < size; col++) {
-                    Block b = s.getBlock(row, col);
+        this.mazeFrame.getContentPane().removeAll();
+        this.mazePanel.removeAll();
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                Block b = s.getBlock(row, col);
 
-                    JLabel block = new JLabel();
-                    int size1 = 800 / getSize();
-                    if (b.isStart == true) {
-                        block.setBackground(Color.BLUE);
-                    }
-
-                    if (b.isGoal == true) {
-                        block.setBackground(Color.GREEN);
-                    }
-
-                    if (b.isWall == true)
-                        block.setBackground(Color.WHITE);
-
-                    if (b.isPath == true)
-                        block.setBackground(Color.BLACK);
-                    List<Block> searchPath = new ArrayList<Block>(s.getSearchPath()).subList(0,index);
-                    if (searchPath.contains(b)) {
-                        block.setBackground(Color.YELLOW);
-                        block.setText(String.valueOf(searchPath.indexOf(b)));
-                        block.setHorizontalAlignment(JLabel.CENTER);
-                    }
-                    block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                    block.setOpaque(true);
-
-                    this.mazePanel.add(block);
+                JLabel block = new JLabel();
+                int size1 = 800 / getSize();
+                if (b.isStart == true) {
+                    block.setBackground(Color.BLUE);
                 }
+
+                if (b.isGoal == true) {
+                    block.setBackground(Color.GREEN);
+                }
+
+                if (b.isWall == true)
+                    block.setBackground(Color.WHITE);
+
+                if (b.isPath == true)
+                    block.setBackground(Color.BLACK);
+                List<Block> searchPath = new ArrayList<Block>(s.getSearchPath());
+                if (searchPath.contains(b)) {
+                    block.setBackground(Color.YELLOW);
+                    block.setText(String.valueOf(searchPath.indexOf(b)));
+                    block.setHorizontalAlignment(JLabel.CENTER);
+                }
+                block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                block.setOpaque(true);
+
+                this.mazePanel.add(block);
             }
-            index++;
-            this.mazePanel.repaint();
-            this.mazePanel.revalidate();
-            this.mazeFrame.add(mazePanel);
-            this.mazeFrame.repaint();
-            this.mazeFrame.revalidate();
         }
+        this.mazePanel.repaint();
+        this.mazePanel.revalidate();
+        this.mazeFrame.add(mazePanel);
+        this.mazeFrame.add(actualBtn);
+        this.mazeFrame.add(optiBtn);
+        this.mazeFrame.repaint();
+        this.mazeFrame.revalidate();
+        List<Block> searchPath = new ArrayList<Block>(s.getSearchPath());
+        int totalPath = searchPath.size();
+        String message;
+        if(pathFound = true) {
+            message = "Path Found!";
+        }
+        else {
+            message = "No path to the goal exists!";
+        }
+
+
+        JOptionPane.showMessageDialog(mazeFrame,
+                message + "\nTotal Number of States Explored: "+ totalPath,
+                "Search Path",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
 }
