@@ -16,8 +16,9 @@ public class Controller {
                 openMaze();
             }
         });
+        this.view.viewSearchPath();
+        this.view.viewActualPath();
     }
-
     public void openMaze() {
         this.view.disposeStart();
         this.view.MazeView();

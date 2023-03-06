@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class View {
     private Search s = new Search(this);
@@ -125,7 +127,7 @@ public class View {
 
 
         if (b.isStart) {
-            ImageIcon mazebotIcon = new ImageIcon("mazebot.png");
+            ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
             Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
             mazebotIcon = new ImageIcon(mazebot);
             block.setIcon(mazebotIcon);
@@ -187,4 +189,136 @@ public class View {
             }
         }
     }
+
+    public void viewActualPath() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+
+        // MAZE VIEW
+        // Get the size of the maze
+        int size = getSize();
+        // Initialize the maze window
+
+        // Initialize maze blocks
+        int index = s.getOptimalPath().size();
+        while(index >= 0) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+            this.mazeFrame.getContentPane().removeAll();
+            this.mazePanel.removeAll();
+            for (int row = 0; row < size; row++) {
+                for (int col = 0; col < size; col++) {
+                    Block b = s.getBlock(row, col);
+
+                    // MAKE BLOCK
+                    JLabel block = new JLabel();
+                    int size1 = 800 / getSize();
+
+                    if (b.isStart == true) {
+                        ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
+                        Image mazebot = mazebotIcon.getImage().getScaledInstance(size1, size1, Image.SCALE_SMOOTH);
+                        mazebotIcon = new ImageIcon(mazebot);
+                        block.setIcon(mazebotIcon);
+                    }
+
+                    if (b.isGoal == true) {
+                        block.setBackground(Color.GREEN);
+                    }
+
+                    if (b.isWall == true)
+                        block.setBackground(Color.WHITE);
+
+                    if (b.isPath == true)
+                        block.setBackground(Color.BLACK);
+                    List<Block> optimalPath = s.getOptimalPath().subList(index, s.getOptimalPath().size());
+                    if (optimalPath.contains(b)) {
+                        block.setBackground(Color.CYAN);
+                        block.setText(String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
+                        block.setHorizontalAlignment(JLabel.CENTER);
+                    }
+                    block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                    block.setOpaque(true);
+
+                    this.mazePanel.add(block);
+                }
+            }
+            index--;
+            this.mazePanel.repaint();
+            this.mazePanel.revalidate();
+            this.mazeFrame.add(mazePanel);
+            this.mazeFrame.repaint();
+            this.mazeFrame.revalidate();
+        }
+    }
+
+    public void viewSearchPath() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+
+        // Get the size of the maze
+        int size = getSize();
+        // Initialize the maze window
+
+        // Initialize maze blocks
+        int index = 0;
+        while(index < s.getSearchPath().size() + 1) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            }
+            this.mazeFrame.getContentPane().removeAll();
+            this.mazePanel.removeAll();
+            for (int row = 0; row < size; row++) {
+                for (int col = 0; col < size; col++) {
+                    Block b = s.getBlock(row, col);
+
+                    JLabel block = new JLabel();
+                    int size1 = 800 / getSize();
+                    if (b.isStart == true) {
+                        ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
+                        Image mazebot = mazebotIcon.getImage().getScaledInstance(size1, size1, Image.SCALE_SMOOTH);
+                        mazebotIcon = new ImageIcon(mazebot);
+                        block.setIcon(mazebotIcon);
+                    }
+
+                    if (b.isGoal == true) {
+                        block.setBackground(Color.GREEN);
+                    }
+
+                    if (b.isWall == true)
+                        block.setBackground(Color.WHITE);
+
+                    if (b.isPath == true)
+                        block.setBackground(Color.BLACK);
+                    List<Block> searchPath = new ArrayList<Block>(s.getSearchPath()).subList(0,index);
+                    if (searchPath.contains(b)) {
+                        block.setBackground(Color.YELLOW);
+                        block.setText(String.valueOf(searchPath.indexOf(b)));
+                        block.setHorizontalAlignment(JLabel.CENTER);
+                    }
+                    block.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                    block.setOpaque(true);
+
+                    this.mazePanel.add(block);
+                }
+            }
+            index++;
+            this.mazePanel.repaint();
+            this.mazePanel.revalidate();
+            this.mazeFrame.add(mazePanel);
+            this.mazeFrame.repaint();
+            this.mazeFrame.revalidate();
+        }
+    }
+
 }

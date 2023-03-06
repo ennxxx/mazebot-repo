@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 
@@ -15,6 +16,7 @@ public class Search {
     private Block startBlock;
     private Block goalBlock;
 
+    LinkedHashSet searchPath = new LinkedHashSet();
     private ArrayList<Block> optimalPath = new ArrayList<Block>();
 
     public Search(View view) {
@@ -119,7 +121,7 @@ public class Search {
         PriorityQueue<Block> open = new PriorityQueue<Block>(new ScoreComparator());
 
         open.add(startBlock);
-
+        searchPath.add(startBlock);
         Block currBlock = null;
 
         //Loops to the maze until no more open blocks to search
@@ -131,7 +133,7 @@ public class Search {
             exploredStates++;
             //Current block deque from the Priority Q
             currBlock = open.poll();
-
+            searchPath.add(currBlock);
             //TO DO: Update GUI Here
             currBlock.isCurrent = true;
             currBlock.isExplored = true;
@@ -312,4 +314,11 @@ public class Search {
         return this.blocks;
     }
 
+    public LinkedHashSet getSearchPath() {
+        return searchPath;
+    }
+
+    public ArrayList<Block> getOptimalPath() {
+        return optimalPath;
+    }
 }
