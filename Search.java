@@ -24,10 +24,10 @@ public class Search {
     }
 
 
-    public void initMaze(int size) {
+    public void initMaze() {
         try {
             // Read file
-            String fileStr = Files.readString(Path.of("maze/maze" + String.valueOf(size) + ".txt"));
+            String fileStr = Files.readString(Path.of("maze/maze" +  ".txt"));
             Integer firstLine = fileStr.indexOf('\n', 0);
             fileStr = fileStr.substring(firstLine + 1, fileStr.length());
 

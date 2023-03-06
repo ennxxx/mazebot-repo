@@ -2,12 +2,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
 import java.awt.Font;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class View {
     private Search s = new Search(this);
@@ -37,16 +40,16 @@ public class View {
         this.welcomeLbl.setBounds(260,10,400,100);
         editFont(welcomeLbl,32);
 
-        // Place instructions
-        this.insLbl = new JLabel("Please pick the size of your maze:");
-        this.insLbl.setBounds(280,40,400,100);
-        editFont(insLbl,18);
-        
-        // Place maze sizes
-        Integer[] mazeSize = {4, 6, 8, 10, 16, 20, 24};
-        this.sizeBox = new JComboBox<Integer>(mazeSize);
-        this.sizeBox.setSelectedIndex(2);
-        this.sizeBox.setBounds(340,105,150,50);
+//        // Place instructions
+//        this.insLbl = new JLabel("Please pick the size of your maze:");
+//        this.insLbl.setBounds(280,40,400,100);
+//        editFont(insLbl,18);
+//
+//        // Place maze sizes
+//        Integer[] mazeSize = {4, 6, 8, 10, 16, 20, 24};
+//        this.sizeBox = new JComboBox<Integer>(mazeSize);
+//        this.sizeBox.setSelectedIndex(2);
+//        this.sizeBox.setBounds(340,105,150,50);
 
         // Place start button
         Icon start = new ImageIcon("start.png");
@@ -56,15 +59,15 @@ public class View {
         this.startBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                s.initMaze(getSize());
+                s.initMaze();
             }
         });
         
         // Components of the frame
         this.startFrame.add(mazeBotLbl);
         this.startFrame.add(welcomeLbl);
-        this.startFrame.add(insLbl);
-        this.startFrame.add(sizeBox);
+//        this.startFrame.add(insLbl);
+//        this.startFrame.add(sizeBox);
         this.startFrame.add(startBtn);
 
         this.startFrame.setVisible(true);
@@ -117,8 +120,18 @@ public class View {
     }
 
     public int getSize() {
-        int size = Integer.parseInt(sizeBox.getSelectedItem().toString());
-        return size;
+        File fileInput = new File("maze/maze.txt");
+
+        Scanner scan = null;
+        try {
+            scan = new Scanner(fileInput);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        int ret = scan.nextInt();
+        scan.close();
+        return 20;
     }
 
     private JLabel makeBlock(Block b) {
