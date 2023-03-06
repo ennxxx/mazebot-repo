@@ -208,7 +208,7 @@ public class View {
             this.mazeFrame.repaint();
             this.mazeFrame.revalidate();
             String message;
-            if(pathFound = true) {
+            if(pathFound == true) {
                 message = "Path Found!";
             }
             else {
