@@ -122,7 +122,8 @@ public class View {
     }
 
     public int getSize() {
-        File fileInput = new File("maze/maze.txt");
+        String filename = "maze/maze.txt";
+        File fileInput = new File(filename);
         Scanner scan = null;
         try {
             scan = new Scanner(fileInput);
@@ -269,7 +270,7 @@ public class View {
         List<Block> searchPath = new ArrayList<Block>(s.getSearchPath());
         int totalPath = searchPath.size();
         String message;
-        if(pathFound = true) {
+        if(pathFound == true) {
             message = "Path Found!";
         }
         else {
