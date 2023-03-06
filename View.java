@@ -130,6 +130,15 @@ public class View {
         return block;
     }
 
+    public void setTextSize(JLabel b, int size, String message) {
+        if (size > 40) {
+            b.setText("<html><span style='font-size:3px'>" + message + "</span></html>");
+        }
+        else {
+            b.setText("<html><span style='font-size:7px'>" + message + "</span></html>");
+        }
+    }
+    
     public void viewOptimalPath() {
 
         int size = getSize();
@@ -159,10 +168,7 @@ public class View {
 
                 if (s.getOptimalPath().contains(b)) {
                     block.setBackground(Color.CYAN);
-                    block.setText(
-                            "<html><span style='font-size:3px'>" +
-                                    String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)) +
-                                    "</span></html>");
+                    setTextSize(block, size, String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
                     block.setFont(null);
                     block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
@@ -233,10 +239,7 @@ public class View {
                 
                 if (searchPath.contains(b) && b.isStart == false) {
                     block.setBackground(Color.YELLOW);
-                    block.setText(
-                        "<html><span style='font-size:3px'>"+
-                                    String.valueOf((searchPath.indexOf(b)) +
-                                            "</span></html>"));
+                    setTextSize(block, size, String.valueOf((searchPath.indexOf(b))));
                     block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
