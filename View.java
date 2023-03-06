@@ -16,10 +16,9 @@ public class View {
     private Search s = new Search(this);
     
     private JFrame startFrame, mazeFrame;
-    private JLabel mazeBotLbl, welcomeLbl, insLbl;
+    private JLabel mazeBotLbl, welcomeLbl;
     private JPanel mazePanel;
-    private JComboBox sizeBox;
-    private JButton startBtn;
+    private JButton startBtn, actualBtn, optiBtn;
 
     public View(ActionListener startBListener) {
         // Initialize the start window
@@ -32,29 +31,18 @@ public class View {
 
         // Place MazeBot sprite
         this.mazeBotLbl = new JLabel();
-        this.mazeBotLbl.setIcon(new ImageIcon("mazebot.png"));
+        this.mazeBotLbl.setIcon(new ImageIcon("assets/mazebot.png"));
         this.mazeBotLbl.setBounds(30,20,200,200);
         
         // Place welcome message
         this.welcomeLbl = new JLabel("Welcome, I am MazeBot!");
-        this.welcomeLbl.setBounds(260,10,400,100);
+        this.welcomeLbl.setBounds(260,40,400,100);
         editFont(welcomeLbl,32);
 
-//        // Place instructions
-//        this.insLbl = new JLabel("Please pick the size of your maze:");
-//        this.insLbl.setBounds(280,40,400,100);
-//        editFont(insLbl,18);
-//
-//        // Place maze sizes
-//        Integer[] mazeSize = {4, 6, 8, 10, 16, 20, 24};
-//        this.sizeBox = new JComboBox<Integer>(mazeSize);
-//        this.sizeBox.setSelectedIndex(2);
-//        this.sizeBox.setBounds(340,105,150,50);
-
         // Place start button
-        Icon start = new ImageIcon("start.png");
+        Icon start = new ImageIcon("assets/start.png");
         this.startBtn = new JButton(start);
-        this.startBtn.setBounds(340,160,150,50);
+        this.startBtn.setBounds(340,130,150,50);
         this.startBtn.addActionListener(startBListener);
         this.startBtn.addActionListener(new ActionListener() {
             @Override
@@ -66,14 +54,12 @@ public class View {
         // Components of the frame
         this.startFrame.add(mazeBotLbl);
         this.startFrame.add(welcomeLbl);
-//        this.startFrame.add(insLbl);
-//        this.startFrame.add(sizeBox);
         this.startFrame.add(startBtn);
 
         this.startFrame.setVisible(true);
     }
 
-    public void MazeView() {
+    public void MazeView(ActionListener actualBListener, ActionListener optiBListener) {
         // Get the size of the maze
         int size = getSize();
         
@@ -82,7 +68,7 @@ public class View {
         this.mazeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mazeFrame.setLayout(null);
         this.mazeFrame.setResizable(false);
-        this.mazeFrame.setSize(900,900);
+        this.mazeFrame.setSize(1180,900);
         this.mazeFrame.getContentPane().setBackground(Color.BLACK);
 
         // Initialize maze panel
@@ -99,7 +85,19 @@ public class View {
             }
         }
 
+        Icon actual = new ImageIcon("assets/exp1.png");
+        this.actualBtn = new JButton(actual);
+        this.actualBtn.setBounds(900,710,210,50);
+        this.actualBtn.addActionListener(actualBListener);
+        
+        Icon optimal = new ImageIcon("assets/opt1.png");
+        this.optiBtn = new JButton(optimal);
+        this.optiBtn.setBounds(900,780,210,50);
+        this.optiBtn.addActionListener(optiBListener);
+
         this.mazeFrame.add(mazePanel);
+        this.mazeFrame.add(actualBtn);
+        this.mazeFrame.add(optiBtn);
         this.mazeFrame.setVisible(true);
 
         s.search();
@@ -131,19 +129,14 @@ public class View {
 
         int ret = scan.nextInt();
         scan.close();
-        return 20;
+        return ret;
     }
 
     private JLabel makeBlock(Block b) {
-        int size = 800 / getSize();
         JLabel block = new JLabel();
 
 
         if (b.isStart) {
-            ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
-            Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
-            mazebotIcon = new ImageIcon(mazebot);
-            block.setIcon(mazebotIcon);
             block.setBackground(Color.BLUE);
         }
 
@@ -162,48 +155,7 @@ public class View {
         return block;
     }
 
-    //NOT WORKING
-    public void updateMazeFrame() {
-
-        Component[] components = mazeFrame.getContentPane().getComponents();
-
-        int size = getSize();
-        int index = 0;
-
-        for (Component component : components) {
-            if (component instanceof JLabel) {
-                JLabel label = (JLabel) component;
-
-                Block b = s.getBlocks().get(index);
-
-                if (b.isCurrent) {
-                    ImageIcon mazebotIcon = new ImageIcon("mazebot.png");
-                    Image mazebot = mazebotIcon.getImage().getScaledInstance(size, size, java.awt.Image.SCALE_SMOOTH);
-                    mazebotIcon = new ImageIcon(mazebot);
-                    label.setIcon(mazebotIcon);
-                }
-
-                if (b.isGoal)
-                    label.setBackground(Color.GREEN);
-
-                if (b.isWall)
-                    label.setBackground(Color.WHITE);
-
-                if (b.isPath) {
-                    if (b.isExplored) {
-                        label.setBackground(Color.GRAY);
-                    }
-                    else {
-                        label.setBackground(Color.BLACK);
-                    }
-                }
-
-                index++;
-            }
-        }
-    }
-
-    public void viewActualPath() {
+    public void viewOptimalPath() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ie) {
@@ -234,10 +186,7 @@ public class View {
                     int size1 = 800 / getSize();
 
                     if (b.isStart == true) {
-                        ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
-                        Image mazebot = mazebotIcon.getImage().getScaledInstance(size1, size1, Image.SCALE_SMOOTH);
-                        mazebotIcon = new ImageIcon(mazebot);
-                        block.setIcon(mazebotIcon);
+                        block.setBackground(Color.BLUE);
                     }
 
                     if (b.isGoal == true) {
@@ -270,7 +219,7 @@ public class View {
         }
     }
 
-    public void viewSearchPath() {
+    public void viewExploredPath() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException ie) {
@@ -298,10 +247,7 @@ public class View {
                     JLabel block = new JLabel();
                     int size1 = 800 / getSize();
                     if (b.isStart == true) {
-                        ImageIcon mazebotIcon = new ImageIcon("assets/mazebot.png");
-                        Image mazebot = mazebotIcon.getImage().getScaledInstance(size1, size1, Image.SCALE_SMOOTH);
-                        mazebotIcon = new ImageIcon(mazebot);
-                        block.setIcon(mazebotIcon);
+                        block.setBackground(Color.BLUE);
                     }
 
                     if (b.isGoal == true) {

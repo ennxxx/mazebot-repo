@@ -16,12 +16,28 @@ public class Controller {
                 openMaze();
             }
         });
-        this.view.viewSearchPath();
-        this.view.viewActualPath();
     }
     public void openMaze() {
         this.view.disposeStart();
-        this.view.MazeView();
+        this.view.MazeView(new ActionListener() {
+            @Override  
+            public void actionPerformed(ActionEvent e) {
+                showExplored();
+            }
+        }, new ActionListener() {
+            @Override  
+            public void actionPerformed(ActionEvent e) {
+                showOptimal();
+            }
+        });
+    }
+
+    public void showExplored() {
+        this.view.viewExploredPath();
+    }
+
+    public void showOptimal() {
+        this.view.viewOptimalPath();
     }
 }
  
