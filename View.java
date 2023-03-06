@@ -69,13 +69,13 @@ public class View {
         this.mazeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mazeFrame.setLayout(null);
         this.mazeFrame.setResizable(false);
-        this.mazeFrame.setSize(1180,900);
+        this.mazeFrame.setSize(1250,900);
         this.mazeFrame.getContentPane().setBackground(Color.BLACK);
 
         // Initialize maze panel
         this.mazePanel = new JPanel();
         this.mazePanel.setLayout(new GridLayout(size, size, 0,0));
-        this.mazePanel.setBounds(50,40,800,800);
+        this.mazePanel.setBounds(20,40,1200,800);
         this.mazePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 10));
         
         // Initialize maze blocks
@@ -91,17 +91,17 @@ public class View {
 
         Icon actual = new ImageIcon("assets/exp1.png");
         this.actualBtn = new JButton(actual);
-        this.actualBtn.setBounds(900,710,210,50);
+        this.actualBtn.setBounds(400,10,210,40);
         this.actualBtn.addActionListener(actualBListener);
         
         Icon optimal = new ImageIcon("assets/opt1.png");
         this.optiBtn = new JButton(optimal);
-        this.optiBtn.setBounds(900,780,210,50);
+        this.optiBtn.setBounds(620,10,210,40);
         this.optiBtn.addActionListener(optiBListener);
 
-        this.mazeFrame.add(mazePanel);
         this.mazeFrame.add(actualBtn);
         this.mazeFrame.add(optiBtn);
+        this.mazeFrame.add(mazePanel);
         this.mazeFrame.setVisible(true);
 
         this.pathFound = s.search();
@@ -191,7 +191,10 @@ public class View {
 
                 if (s.getOptimalPath().contains(b)) {
                     block.setBackground(Color.CYAN);
-                    block.setText(String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)));
+                    block.setText(
+                            "<html><body style=\"white-space:nowrap\">" +
+                                    String.valueOf(s.getOptimalPath().size() - s.getOptimalPath().indexOf(b)) +
+                                    "</body></html>");
                     block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
@@ -205,9 +208,11 @@ public class View {
             actualBtn.setIcon(new ImageIcon("assets/exp1.png"));
             this.mazePanel.repaint();
             this.mazePanel.revalidate();
-            this.mazeFrame.add(mazePanel);
+
             this.mazeFrame.add(actualBtn);
             this.mazeFrame.add(optiBtn);
+            this.mazeFrame.add(mazePanel);
+
             this.mazeFrame.repaint();
             this.mazeFrame.revalidate();
             String message;
@@ -256,7 +261,10 @@ public class View {
                 
                 if (searchPath.contains(b) && b.isStart == false) {
                     block.setBackground(Color.YELLOW);
-                    block.setText(String.valueOf(searchPath.indexOf(b)));
+                    block.setText(
+                            "<html><body style=\"white-space:nowrap\">" +
+                                    String.valueOf((searchPath.indexOf(b)) +
+                                            "</body></html>"));
                     block.setPreferredSize(block.getPreferredSize());
                     block.setHorizontalAlignment(JLabel.CENTER);
                 }
@@ -271,9 +279,9 @@ public class View {
         optiBtn.setIcon(new ImageIcon("assets/opt1.png"));
         this.mazePanel.repaint();
         this.mazePanel.revalidate();
-        this.mazeFrame.add(mazePanel);
         this.mazeFrame.add(actualBtn);
         this.mazeFrame.add(optiBtn);
+        this.mazeFrame.add(mazePanel);
         this.mazeFrame.repaint();
         this.mazeFrame.revalidate();
         List<Block> searchPath = new ArrayList<Block>(s.getSearchPath());
